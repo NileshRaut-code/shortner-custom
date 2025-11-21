@@ -1,4 +1,4 @@
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const API_URL = process.env.REACT_APP_API_URL || 'https://shortner-custom.onrender.com';
 
 export async function createLink(targetUrl, customCode) {
   const response = await fetch(`${API_URL}/api/links`, {
