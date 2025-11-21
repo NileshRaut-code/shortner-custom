@@ -1,6 +1,7 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /app
+RUN apt-get update && apt-get install -y openssl && apt-get clean
 
 COPY frontend/package.json frontend/package-lock.json* ./frontend/
 COPY frontend/public ./frontend/public
