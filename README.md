@@ -1,6 +1,6 @@
-# TinyLink - URL Shortener
+Custm  URL Shortener
 
-A production-ready URL shortener application with React frontend and Node.js backend, deployed on a single domain.
+A production-ready URL shortener application with React frontend and Node.js backend
 
 ## Features
 
@@ -18,13 +18,11 @@ A production-ready URL shortener application with React frontend and Node.js bac
 - **Database**: PostgreSQL + Prisma ORM
 - **Styling**: Custom CSS
 - **Security**: Helmet, CORS, Rate Limiting
-- **Deployment**: Docker + Railway
 
 ## Prerequisites
 
 - Node.js 20+
-- PostgreSQL 12+
-- npm or yarn
+
 
 ## Local Development
 
@@ -168,71 +166,3 @@ CREATE TABLE "Link" (
 );
 ```
 
-## Deployment
-
-### Docker
-
-Build and run with Docker:
-
-```bash
-docker build -t tinylink-backend ./backend
-docker run -p 3000:3000 --env-file .env tinylink-backend
-
-docker build -t tinylink-frontend ./frontend
-docker run -p 5173:5173 tinylink-frontend
-```
-
-### Railway
-
-1. Connect your GitHub repo to Railway
-2. Add PostgreSQL service
-3. Set environment variables
-4. Deploy
-
-## Project Structure
-
-```
-shortner-project/
-├── Dockerfile
-├── railway.json
-├── .env.example
-├── .gitignore
-├── README.md
-├── backend/
-│   ├── src/
-│   │   ├── index.js
-│   │   ├── controllers/
-│   │   ├── services/
-│   │   ├── routes/
-│   │   ├── db/
-│   │   └── utils/
-│   ├── prisma/
-│   │   └── schema.prisma
-│   └── package.json
-└── frontend-cra/
-    ├── public/
-    ├── src/
-    │   ├── components/
-    │   ├── pages/
-    │   ├── App.js
-    │   ├── api.js
-    │   └── index.css
-    └── package.json
-```
-
-## Code Rules
-
-- Custom codes: 6-8 alphanumeric characters [A-Za-z0-9] (required)
-- Conflict on duplicate code: 409 response
-- Deleted link redirect: 404 response
-- All timestamps in UTC
-
-## Pages
-
-- **`/`** - Dashboard (create links, view all links)
-- **`/code/:code`** - Link statistics page
-- **`/:code`** - Redirect to target URL (302)
-
-## License
-
-MIT
