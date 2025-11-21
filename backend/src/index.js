@@ -40,7 +40,7 @@ app.use(
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 
-const frontendBuildPath = path.join(__dirname, '../../frontend-cra/build');
+const frontendBuildPath = path.join(__dirname, '../../frontend/build');
 app.use(express.static(frontendBuildPath));
 
 app.get('/healthz', healthCheck);
