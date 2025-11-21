@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: [process.env.CORS_ORIGIN || 'http://localhost:3000', process.env.CORS_ORIGIN2 || 'http://localhost:3000'],
+    origin: [process.env.CORS_ORIGIN || 'http://localhost:3001', process.env.CORS_ORIGIN2 || 'http://localhost:3000'],
     credentials: true,
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   })
@@ -45,8 +45,12 @@ app.use(express.static(frontendBuildPath));
 
 app.get('/healthz', healthCheck);
 app.use('/api/links', linksRouter);
-app.use('/:code', redirectRouter);
-
+app.get('/:code', (req, res, next) => {
+  const { code } = req.params;
+  if (/^[a-zA-Z0-9]{4,12}$/.test(code)) {
+    return redirectRouter(req, res, next);}
+  next();
+});
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendBuildPath, 'index.html'));
 });

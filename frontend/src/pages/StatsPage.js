@@ -18,7 +18,7 @@ export default function StatsPage() {
         const data = await getLinkStats(code);
         setLink(data);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || 'Failed to load statistics');
       } finally {
         setLoading(false);
       }
@@ -28,106 +28,105 @@ export default function StatsPage() {
   }, [code]);
 
   return (
-    <main>
-      <div className="max-w-2xl">
+    <main className="px-4 py-10 flex justify-center">
+      <div className="w-full max-w-2xl">
+
         <button
           onClick={() => navigate('/')}
-          className="back-link"
+          className="text-blue-600 hover:underline mb-6 inline-flex items-center"
         >
           ← Back to Dashboard
         </button>
 
-        {loading ? (
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <div className="spinner"></div>
-            </div>
-            <p style={{ color: '#4b5563' }}>Loading link statistics...</p>
+        {/* Loading Spinner */}
+        {loading && (
+          <div className="bg-white p-6 rounded-xl shadow text-center">
+            <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading link statistics...</p>
           </div>
-        ) : error ? (
-          <div className="card">
-            <div className="alert alert-error" style={{ marginBottom: '1rem' }}>
+        )}
+
+        {/* Error UI */}
+        {error && !loading && (
+          <div className="bg-white p-6 rounded-xl shadow">
+            <div className="p-4 bg-red-100 text-red-700 rounded-lg mb-4">
               {error}
             </div>
             <button
               onClick={() => navigate('/')}
-              className="btn-primary"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             >
               Back to Dashboard
             </button>
           </div>
-        ) : (
-          <div className="card">
-            <h1 style={{ fontSize: '1.875rem', marginBottom: '0.5rem' }}>
-              Link Statistics
-            </h1>
-            <p style={{ color: '#4b5563', marginBottom: '2rem' }}>
-              Details for short code: <span style={{ fontFamily: 'monospace', fontWeight: 'bold', color: '#2563eb' }}>
-                {link.code}
-              </span>
-            </p>
+        )}
 
-            <div className="stats-grid">
+        {/* Stats UI */}
+        {!loading && !error && link && (
+          <div className="bg-white p-8 rounded-xl shadow space-y-8">
+            <div>
+              <h1 className="text-3xl font-semibold mb-1">Link Statistics</h1>
+              <p className="text-gray-600">
+                For short code:{" "}
+                <span className="font-mono font-bold text-blue-600">{link.code}</span>
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+              {/* Short Code */}
               <div>
-                <label className="form-label">Short Code</label>
-                <div style={{
-                  backgroundColor: '#f3f4f6',
-                  padding: '1rem',
-                  borderRadius: '0.5rem',
-                  fontFamily: 'monospace',
-                  fontSize: '1.125rem',
-                  color: '#2563eb',
-                  border: '1px solid #e5e7eb'
-                }}>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Short Code
+                </label>
+                <div className="bg-gray-100 p-3 rounded-lg font-mono text-blue-700 border">
                   {link.code}
                 </div>
               </div>
 
+              {/* Target URL */}
               <div>
-                <label className="form-label">Target URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Target URL
+                </label>
                 <a
                   href={link.target_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    display: 'block',
-                    backgroundColor: '#f3f4f6',
-                    padding: '1rem',
-                    borderRadius: '0.5rem',
-                    wordBreak: 'break-all',
-                    border: '1px solid #e5e7eb'
-                  }}
+                  className="block bg-gray-100 p-3 rounded-lg break-words border hover:bg-gray-200"
                 >
                   {link.target_url}
                 </a>
               </div>
 
-              <div className="stat-box primary">
-                <label className="form-label">Total Clicks</label>
-                <div className="value">{link.total_clicks}</div>
+              {/* Total Clicks */}
+              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                <label className="block text-sm text-gray-700">Total Clicks</label>
+                <div className="text-3xl font-semibold text-blue-700">
+                  {link.total_clicks}
+                </div>
               </div>
 
-              <div className="stat-box">
-                <label className="form-label">Last Clicked</label>
-                <div style={{ fontSize: '1.125rem', color: '#374151' }}>
+              {/* Last Clicked */}
+              <div className="bg-gray-50 border p-4 rounded-lg">
+                <label className="block text-sm text-gray-700">Last Clicked</label>
+                <div className="text-lg text-gray-800">
                   {link.last_clicked
                     ? new Date(link.last_clicked).toLocaleString()
                     : 'Never clicked'}
                 </div>
               </div>
 
-              <div>
-                <label className="form-label">Created</label>
-                <div style={{
-                  backgroundColor: '#f3f4f6',
-                  padding: '1rem',
-                  borderRadius: '0.5rem',
-                  color: '#374151',
-                  border: '1px solid #e5e7eb'
-                }}>
+              {/* Created Date */}
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Created At
+                </label>
+                <div className="bg-gray-100 p-3 rounded-lg border text-gray-800">
                   {new Date(link.created_at).toLocaleString()}
                 </div>
               </div>
+
             </div>
           </div>
         )}
